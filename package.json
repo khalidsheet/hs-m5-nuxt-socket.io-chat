@@ -14,7 +14,7 @@
     "@nuxtjs/tailwindcss": "^6.2.0",
     "@pinia/nuxt": "^0.4.6",
     "pinia": "^2.0.29",
-    "socket.io": "^4.5.2",
-    "socket.io-client": "^4.5.2"
+    "socket.io": "4.5.2",
+    "socket.io-client": "4.5.2"
   }
 }
