@@ -2,6 +2,7 @@
   <div class="layout">
     <Header />
     <Head>
+      <title>FoxyChat - Chat for all</title>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link
@@ -22,5 +23,9 @@
 <style scoped>
 .layout {
   @apply flex flex-col h-screen w-screen bg-gray-200 text-gray-900;
+}
+
+.content {
+  width: calc(100vw - 256px);
 }
 </style>
