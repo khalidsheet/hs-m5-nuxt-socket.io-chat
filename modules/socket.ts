@@ -11,7 +11,7 @@ export default defineNuxtModule({
         io.broadcast.emit("join", <PublicMessage>{
           date: new Date(),
           from: io.id,
-          message: "just joind the chat.",
+          message: `${io.id} just joind the chat.`,
           type: "system",
         });
         console.log(io.id, "has connected");

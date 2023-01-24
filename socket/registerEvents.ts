@@ -14,11 +14,15 @@ export const registerEvents = (
     io.broadcast.emit("message-broadcasted", message);
   });
 
+  io.on("join-user", (nickname: string) => {
+    // this one should handle joining of the user and the nickname
+  });
+
   io.on("disconnect", () => {
     io.broadcast.emit("join", <PublicMessage>{
       date: new Date(),
       from: io.id,
-      message: "just left the chat.",
+      message: `${io.id} just left the chat.`,
       type: "system",
     });
   });
