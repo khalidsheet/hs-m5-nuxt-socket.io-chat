@@ -27,6 +27,7 @@ const onJoin = () => {
         class="w-full h-12 rounded-lg text-center outline-none"
         placeholder="Enter your nickname"
         v-model="nickname"
+        @keyup.enter="onJoin"
       />
       <button
         class="w-full h-12 rounded-lg text-center text-white bg-green-500 mt-4 hover:bg-green-700"

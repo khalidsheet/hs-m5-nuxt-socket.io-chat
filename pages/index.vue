@@ -2,9 +2,43 @@
 import { Ref } from "vue";
 import { PublicMessage } from "~~/interfaces/message";
 import { useUserStore } from "~~/store/user-store";
+import { useScroll, useTitle, useWindowFocus } from "@vueuse/core";
 
 definePageMeta({
   middleware: "auth",
+});
+
+const focused = useWindowFocus();
+const flip = ref(false);
+const audio = new Audio("/sounds/notification.wav");
+
+const updatePageTitle = (title: string) => {
+  console.log("test sss");
+  useTitle(title);
+  return;
+
+  const interval = setInterval(() => {
+    console.log("in");
+
+    if (flip.value) {
+      useTitle(title);
+    } else {
+      useTitle("FoxyChat - Chat for all");
+    }
+
+    flip.value = !flip.value;
+
+    if (focused.value) {
+      useTitle("FoxyChat - Chat for all");
+      clearInterval(interval);
+    }
+  }, 2000);
+};
+
+const el = ref<HTMLElement | null>(null);
+
+const { y } = useScroll(el, {
+  behavior: "smooth",
 });
 
 const messageContent = ref<string>();
@@ -24,10 +58,12 @@ io.on("join", (message: PublicMessage) => {
 
 io.on("message-broadcasted", (message: PublicMessage) => {
   messages.value.push(message);
-
-  console.log({ message });
-
-  console.log(messages.value);
+  updatePageTitle(`${message.from} sent a message`);
+  setTimeout(() => {
+    y.value = el.value?.scrollHeight ?? 0;
+  }, 50);
+  audio.volume = 0.2;
+  audio.play();
 });
 
 io.on("disconnect", () => {
@@ -38,7 +74,14 @@ const sendMessage = (e: KeyboardEvent) => {
   const code = e.code;
 
   if (code == "Enter" && e.shiftKey) {
-    console.log("enter", messageContent.value);
+    return;
+  }
+
+  if (code == "Enter") {
+    if (messageContent.value?.trim() == "") {
+      return;
+    }
+
     io.emit("broadcast-message", <PublicMessage>{
       date: new Date(),
       message: messageContent.value,
@@ -54,12 +97,15 @@ const sendMessage = (e: KeyboardEvent) => {
     });
 
     messageContent.value = "";
+    setTimeout(() => {
+      y.value = el.value?.scrollHeight ?? 0;
+    }, 50);
   }
 };
 </script>
 <template>
   <div>
-    <div class="chat-view">
+    <div ref="el" class="chat-view">
       <ChatView :messages="messages" />
     </div>
     <div class="controls">
@@ -84,7 +130,7 @@ const sendMessage = (e: KeyboardEvent) => {
 }
 
 .controls textarea {
-  @apply w-full h-full px-5 py-2  min-h-full rounded-md outline-none text-sm focus:h-32 focus:mb-20 transition-all;
+  @apply w-full h-full px-5 py-2 max-h-full min-h-full rounded-md outline-none text-sm focus:h-32 transition-all;
   width: calc(100vw - 276px);
   max-width: calc(100vw - 256px);
 }
