@@ -1,6 +1,19 @@
+<script setup lang="ts">
+const { io } = useSocketIO();
+
+const clients = ref();
+
+io.on("update-client-list", (_clients) => {
+  console.log("should be updated", clients);
+  clients.value = _clients;
+
+  console.log(clients.value);
+});
+</script>
+
 <template>
   <div class="chatlist">
-    <SideChatItem />
+    <SideChatItem v-for="client in clients" :client="client" />
   </div>
 </template>
 <style scoped>

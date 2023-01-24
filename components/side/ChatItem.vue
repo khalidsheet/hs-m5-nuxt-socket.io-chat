@@ -1,10 +1,15 @@
+<script setup lang="ts">
+defineProps<{
+  client: any;
+}>();
+</script>
 <template>
-  <div class="chat-item">
+  <div v-if="client" class="chat-item">
     <div class="avatar"></div>
-    <div class="nickname">Khalid Sheet</div>
+    <div class="nickname">{{ client[1] }}</div>
     <div class="message">
-      <div class="content">Hello all of you..</div>
-      <div class="date">1 min ago</div>
+      <div class="content">{{ client[0] }}</div>
+      <!-- <div class="date">1 min ago</div> -->
     </div>
   </div>
 </template>

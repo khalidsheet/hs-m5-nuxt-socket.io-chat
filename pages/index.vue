@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { PublicMessage } from "~~/interfaces/message";
+import { useUserStore } from "~~/store/user-store";
+
+definePageMeta({
+  middleware: "auth",
+});
 
 const messageContent = ref<string>();
 const messages: Ref<PublicMessage[]> = ref([]);
 
 const { io } = useSocketIO();
+const userStore = useUserStore();
 
 io.on("connect", () => {
   console.log(io.id);
@@ -30,21 +36,20 @@ io.on("disconnect", () => {
 
 const sendMessage = (e: KeyboardEvent) => {
   const code = e.code;
-  console.log({ code });
 
   if (code == "Enter" && e.shiftKey) {
     console.log("enter", messageContent.value);
     io.emit("broadcast-message", <PublicMessage>{
       date: new Date(),
       message: messageContent.value,
-      from: "khalid",
+      from: userStore.getUser()?.nickname,
       type: "client",
     });
 
     messages.value.push(<PublicMessage>{
       date: new Date(),
       message: messageContent.value,
-      from: "khalid",
+      from: userStore.getUser()?.nickname,
       type: "client",
     });
 

@@ -1,5 +1,5 @@
+import { setClient, getClient, getClients } from "./clientList";
 import { PublicMessage } from "./../interfaces/message/PublicMessage";
-import { Message } from "./../interfaces/message/Message";
 import { Socket } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
@@ -15,15 +15,19 @@ export const registerEvents = (
   });
 
   io.on("join-user", (nickname: string) => {
-    // this one should handle joining of the user and the nickname
-  });
+    setClient(nickname, io.id);
 
-  io.on("disconnect", () => {
     io.broadcast.emit("join", <PublicMessage>{
       date: new Date(),
       from: io.id,
-      message: `${io.id} just left the chat.`,
+      message: `${nickname} just joind the chat.`,
       type: "system",
     });
+
+    console.log("ss", getClients());
+
+    const clients = [...getClients()];
+
+    io.broadcast.emit("update-client-list", clients);
   });
 };
