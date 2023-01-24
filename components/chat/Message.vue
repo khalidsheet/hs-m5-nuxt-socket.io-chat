@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { PrivateMessage, PublicMessage } from "~~/interfaces/message";
+import { useUserStore } from "~~/store/user-store";
+
+const { getUser } = useUserStore();
 
 const props = defineProps<{
   message: PublicMessage | PrivateMessage;
 }>();
 
-const currentUser = "s";
+const currentUser = getUser()?.nickname;
 </script>
 <template>
   <div class="message-container" :class="message.type">
@@ -58,7 +61,7 @@ const currentUser = "s";
 }
 
 .info {
-  @apply text-xs pl-2 mt-1 mb-3 text-gray-400 absolute;
+  @apply text-xs pl-2 mt-1 mb-3 text-gray-400;
 }
 
 .client .message.others {

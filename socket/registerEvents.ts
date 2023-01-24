@@ -1,15 +1,12 @@
 import { setClient, getClient, getClients } from "./clientList";
 import { PublicMessage } from "./../interfaces/message/PublicMessage";
-import { Socket } from "socket.io";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import { Server, Socket } from "socket.io";
 
 /**
  * Registers all the required events
  * @param io Socket
  */
-export const registerEvents = (
-  io: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
-) => {
+export const registerEvents = (io: Socket, socket: Server) => {
   io.on("broadcast-message", (message: PublicMessage) => {
     io.broadcast.emit("message-broadcasted", message);
   });
@@ -24,10 +21,14 @@ export const registerEvents = (
       type: "system",
     });
 
-    console.log("ss", getClients());
+    setTimeout(() => {
+      const clients = [...getClients()];
+      io.broadcast.emit("update-client-list", clients);
+    }, 100);
+  });
 
+  io.on("fetch-client-list", () => {
     const clients = [...getClients()];
-
-    io.broadcast.emit("update-client-list", clients);
+    io.emit("update-client-list", clients);
   });
 };

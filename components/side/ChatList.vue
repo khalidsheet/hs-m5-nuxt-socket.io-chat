@@ -1,13 +1,18 @@
 <script setup lang="ts">
+import { useUserStore } from "~~/store/user-store";
+
 const { io } = useSocketIO();
+const { getUser } = useUserStore();
 
 const clients = ref();
 
 io.on("update-client-list", (_clients) => {
-  console.log("should be updated", clients);
+  console.log("hey");
   clients.value = _clients;
+});
 
-  console.log(clients.value);
+onMounted(() => {
+  io.emit("fetch-client-list");
 });
 </script>
 

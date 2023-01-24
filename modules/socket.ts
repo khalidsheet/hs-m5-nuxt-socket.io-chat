@@ -9,7 +9,7 @@ export default defineNuxtModule({
     nuxt.hook("listen", (server) => {
       const socket = new Server(server);
       socket.on("connection", (io) => {
-        registerEvents(io);
+        registerEvents(io, socket);
 
         io.on("disconnect", () => {
           if (getClient(io.id)) {
