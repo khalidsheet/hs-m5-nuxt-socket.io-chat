@@ -27,6 +27,10 @@ export const registerEvents = (io: Socket, socket: Server) => {
     }, 100);
   });
 
+  io.on("typing", (message: Partial<PublicMessage>) => {
+    io.broadcast.emit("user-typing", message);
+  });
+
   io.on("fetch-client-list", () => {
     const clients = [...getClients()];
     io.emit("update-client-list", clients);

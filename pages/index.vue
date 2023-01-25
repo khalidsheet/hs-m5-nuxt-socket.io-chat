@@ -71,7 +71,15 @@ io.on("disconnect", () => {
 });
 
 const sendMessage = (e: KeyboardEvent) => {
-  const code = e.code;
+  const code: string = e.code;
+
+  // send typing event
+  if (e.code !== "Enter" && e.code !== "Backspace") {
+    io.emit("typing", <Partial<PublicMessage>>{
+      from: userStore.getUser()?.nickname,
+      type: "client",
+    });
+  }
 
   if (code == "Enter" && e.shiftKey) {
     return;

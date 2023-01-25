@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
-    "./modules/socket.ts",
     "@vueuse/sound/nuxt",
+    "./modules/socket.ts",
   ],
 });
