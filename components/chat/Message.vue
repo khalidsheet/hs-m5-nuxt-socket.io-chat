@@ -3,19 +3,42 @@ import { PrivateMessage, PublicMessage } from "~~/interfaces/message";
 import { useUserStore } from "~~/store/user-store";
 
 const { getUser } = useUserStore();
+const messageRef = ref();
 
 const props = defineProps<{
   message: PublicMessage | PrivateMessage;
 }>();
+
+console.log(props.message);
+
+if (props.message.kind != "imageUrl") {
+  console.log("not imageUrl");
+
+  let urlRegex =
+    /([(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*))/gi;
+  messageRef.value = props.message.message.replaceAll(
+    urlRegex,
+    `<a href="$1" class="text-orange-400" target="_blank">$1</a>`
+  );
+} else {
+  console.log("else");
+
+  if (props.message.kind == "imageUrl") {
+    console.log("not an image");
+
+    messageRef.value = props.message.message;
+  }
+}
 
 const currentUser = getUser()?.nickname;
 </script>
 <template>
   <div class="message-container" :class="message.type">
     <div class="message" :class="currentUser == message.from ? 'me' : 'others'">
-      <div class="content">
-        {{ message.message }}
+      <div v-if="message.kind == 'imageUrl'">
+        <img :src="messageRef" :alt="messageRef" class="rounded-md w-96" />
       </div>
+      <div v-else class="content" v-html="messageRef"></div>
       <div v-if="message.type != 'system'" class="info block w-full">
         {{ message.from }} -
         {{

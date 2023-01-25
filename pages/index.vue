@@ -92,16 +92,22 @@ const sendMessage = (e: KeyboardEvent) => {
 
     io.emit("broadcast-message", <PublicMessage>{
       date: new Date(),
-      message: messageContent.value,
+      message: messageContent.value?.trim(),
       from: userStore.getUser()?.nickname,
       type: "client",
+      kind: !isImage(<string>messageContent.value?.trim())
+        ? "text"
+        : "imageUrl",
     });
 
     messages.value.push(<PublicMessage>{
       date: new Date(),
-      message: messageContent.value,
+      message: messageContent.value?.trim(),
       from: userStore.getUser()?.nickname,
       type: "client",
+      kind: !isImage(<string>messageContent.value?.trim())
+        ? "text"
+        : "imageUrl",
     });
 
     messageContent.value = "";
@@ -110,6 +116,10 @@ const sendMessage = (e: KeyboardEvent) => {
     }, 50);
   }
 };
+
+function isImage(url: string) {
+  return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+}
 </script>
 <template>
   <div>
