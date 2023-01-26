@@ -5,5 +5,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@vueuse/sound/nuxt",
     "./modules/socket.ts",
+    "nuxt-link-preview",
+    "@formkit/nuxt",
   ],
 });

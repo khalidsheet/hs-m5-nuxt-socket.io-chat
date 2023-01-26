@@ -62,8 +62,11 @@ io.on("message-broadcasted", (message: PublicMessage) => {
   setTimeout(() => {
     y.value = el.value?.scrollHeight ?? 0;
   }, 50);
-  audio.volume = 0.2;
-  audio.play();
+
+  if (focused) {
+    audio.volume = 0.2;
+    audio.play();
+  }
 });
 
 io.on("disconnect", () => {
@@ -118,7 +121,7 @@ const sendMessage = (e: KeyboardEvent) => {
 };
 
 function isImage(url: string) {
-  return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+  return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)+(.*)$/.test(url);
 }
 </script>
 <template>

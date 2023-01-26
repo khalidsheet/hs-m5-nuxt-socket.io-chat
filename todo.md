@@ -3,9 +3,9 @@
 2. [x] Setting up socket server
 3. [x] Setting up socket connection between the server and the client
 4. [x] Getting the interface ready
-5. [ ] Showing users list
+5. [x] Showing users list
 6. [x] Send & Receive public messages
-7. [ ] Implement user typing event
+7. [x] Implement user typing event
 8. [x] Implement user in/out event
-9. [ ] Implement user nickname
+9. [x] Implement user nickname
 10. [ ] Implement private messaging

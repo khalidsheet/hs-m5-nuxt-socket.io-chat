@@ -7,7 +7,7 @@ import { Server, Socket } from "socket.io";
  * @param io Socket
  */
 export const registerEvents = (io: Socket, socket: Server) => {
-  io.on("broadcast-message", (message: PublicMessage) => {
+  io.on("broadcast-message", async (message: PublicMessage) => {
     io.broadcast.emit("message-broadcasted", message);
   });
 
@@ -34,5 +34,9 @@ export const registerEvents = (io: Socket, socket: Server) => {
   io.on("fetch-client-list", () => {
     const clients = [...getClients()];
     io.emit("update-client-list", clients);
+  });
+
+  io.on("forceDisconnect", () => {
+    io.disconnect(true);
   });
 };
