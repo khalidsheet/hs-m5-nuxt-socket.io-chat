@@ -50,5 +50,5 @@ export const useFirebaseAuth = () => {
     }
   };
 
-  return { signin, signup };
+  return { signin, signup, signUpWithGoogle };
 };
